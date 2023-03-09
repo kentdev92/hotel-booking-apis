@@ -4,17 +4,17 @@ const { objectId } = require('./custom.validation');
 const createRoom = {
   body: Joi.object().keys({
     name: Joi.string().required(),
-    description: Joi.string(),
+    description: Joi.string().required(),
     price: Joi.number().required(),
-    location: Joi.string().required(),
+    capacity: Joi.number().required(),
+    isAvailable: Joi.boolean().required(),
+    image: Joi.string(),
   }),
 };
 
 const getRooms = {
   query: Joi.object().keys({
     name: Joi.string(),
-    price: Joi.number(),
-    location: Joi.string(),
     sortBy: Joi.string(),
     limit: Joi.number().integer(),
     page: Joi.number().integer(),
@@ -29,14 +29,16 @@ const getRoom = {
 
 const updateRoom = {
   params: Joi.object().keys({
-    roomId: Joi.string().required().custom(objectId),
+    roomId: Joi.required().custom(objectId),
   }),
   body: Joi.object()
     .keys({
       name: Joi.string(),
       description: Joi.string(),
       price: Joi.number(),
-      location: Joi.string(),
+      capacity: Joi.number(),
+      isAvailable: Joi.boolean(),
+      image: Joi.string(),
     })
     .min(1),
 };
@@ -58,7 +60,7 @@ const getRoomBookings = {
   }),
 };
 
-module.exports = {
+const roomValidation = {
   createRoom,
   getRooms,
   getRoom,
@@ -66,3 +68,5 @@ module.exports = {
   deleteRoom,
   getRoomBookings,
 };
+
+module.exports = roomValidation;

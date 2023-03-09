@@ -70,24 +70,17 @@ const deleteRoomById = async (roomId) => {
 };
 
 /**
- * Get all bookings for a room
+ * Get room bookings by roomId
  * @param {ObjectId} roomId
+ * @param {Object} options - Query options
+ * @param {string} [options.sortBy] - Sort option in the format: sortField:(desc|asc)
+ * @param {number} [options.limit] - Maximum number of results per page (default = 10)
+ * @param {number} [options.page] - Current page (default = 1)
  * @returns {Promise<QueryResult>}
  */
-
-const getRoomBookings = async (roomId, sortBy, limit, page) => {
-  const options = {
-    page,
-    limit,
-    sort: sortBy,
-    populate: {
-      path: 'user',
-      select: 'name email',
-    },
-  };
-
-  const bookings = await Booking.paginate({ room: roomId }, options);
-
+const getRoomBookings = async (roomId, options) => {
+  const filter = { roomId };
+  const bookings = await Booking.paginate(filter, options);
   return bookings;
 };
 
