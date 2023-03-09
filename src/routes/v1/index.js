@@ -1,9 +1,10 @@
 const express = require('express');
 const authRoute = require('./auth.route');
 const userRoute = require('./user.route');
-const orderRoute = require('./order.route');
-const houseRoute = require('./house.route');
 const docsRoute = require('./docs.route');
+const roomRoute = require('./room.route');
+const bookingRoute = require('./booking.route');
+const reviewRoute = require('./review.route');
 const config = require('../../config/config');
 
 const router = express.Router();
@@ -17,14 +18,21 @@ const defaultRoutes = [
     path: '/users',
     route: userRoute,
   },
-  // {
-  //   path: '/houses',
-  //   route: houseRoute,
-  // },
-  // {
-  //   path: '/orders',
-  //   route: orderRoute,
-  // },
+  {
+    path: '/rooms',
+    route: roomRoute,
+    roles: ['admin'],
+  },
+  {
+    path: '/bookings',
+    route: bookingRoute,
+    roles: ['user', 'admin'],
+  },
+  {
+    path: '/reviews',
+    route: reviewRoute,
+    roles: ['user'],
+  },
 ];
 
 const devRoutes = [
