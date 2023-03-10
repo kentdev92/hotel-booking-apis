@@ -3,18 +3,22 @@ const { objectId } = require('./custom.validation');
 
 const createRoom = {
   body: Joi.object().keys({
-    name: Joi.string().required(),
+    title: Joi.string().required(),
     description: Joi.string().required(),
     price: Joi.number().required(),
+    photos: Joi.array().items(Joi.string()),
+    amenities: Joi.array().items(Joi.string().valid('TV', 'WiFi', 'AC', 'parking')).required(),
     capacity: Joi.number().required(),
-    isAvailable: Joi.boolean().required(),
-    image: Joi.string(),
+    size: Joi.number().required(),
+    hostId: Joi.string().custom(objectId),
   }),
 };
 
 const getRooms = {
   query: Joi.object().keys({
-    name: Joi.string(),
+    title: Joi.string(),
+    description: Joi.string(),
+    price: Joi.number(),
     sortBy: Joi.string(),
     limit: Joi.number().integer(),
     page: Joi.number().integer(),
@@ -23,7 +27,7 @@ const getRooms = {
 
 const getRoom = {
   params: Joi.object().keys({
-    roomId: Joi.string().required().custom(objectId),
+    roomId: Joi.string().custom(objectId),
   }),
 };
 
@@ -33,40 +37,28 @@ const updateRoom = {
   }),
   body: Joi.object()
     .keys({
-      name: Joi.string(),
+      title: Joi.string(),
       description: Joi.string(),
       price: Joi.number(),
+      photos: Joi.array().items(Joi.string()),
+      amenities: Joi.array().items(Joi.string().valid('TV', 'WiFi', 'AC', 'parking')),
       capacity: Joi.number(),
-      isAvailable: Joi.boolean(),
-      image: Joi.string(),
+      size: Joi.number(),
+      hostId: Joi.string().custom(objectId),
     })
     .min(1),
 };
 
 const deleteRoom = {
   params: Joi.object().keys({
-    roomId: Joi.string().required().custom(objectId),
+    roomId: Joi.string().custom(objectId),
   }),
 };
 
-const getRoomBookings = {
-  params: Joi.object().keys({
-    roomId: Joi.string().required().custom(objectId),
-  }),
-  query: Joi.object().keys({
-    sortBy: Joi.string(),
-    limit: Joi.number().integer(),
-    page: Joi.number().integer(),
-  }),
-};
-
-const roomValidation = {
+module.exports = {
   createRoom,
   getRooms,
   getRoom,
   updateRoom,
   deleteRoom,
-  getRoomBookings,
 };
-
-module.exports = roomValidation;
